@@ -1,0 +1,40 @@
+{
+  "name": "ryanpeach",
+  "owner": {
+    "name": "Ryan Peach",
+    "email": "rgpeach10@gmail.com",
+    "url": "https://github.com/ryanpeach"
+  },
+  "metadata": {
+    "description": "Ryan Peach's Claude Code plugins.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "skill-linting",
+      "source": {
+        "source": "github",
+        "repo": "ryanpeach/skill-linting"
+      },
+      "description": "Audits skills repos: structural lint + Claude Code safety review.",
+      "homepage": "https://github.com/ryanpeach/skill-linting",
+      "repository": "https://github.com/ryanpeach/skill-linting",
+      "license": "MIT",
+      "keywords": ["skills", "lint", "audit", "safety"],
+      "category": "developer-tools"
+    },
+    {
+      "name": "superpowers",
+      "source": {
+        "source": "github",
+        "repo": "ryanpeach/superpowers"
+      },
+      "description": "Core skills library for Claude Code: TDD, debugging, collaboration patterns, and proven techniques.",
+      "homepage": "https://github.com/ryanpeach/superpowers",
+      "repository": "https://github.com/ryanpeach/superpowers",
+      "license": "MIT",
+      "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows"],
+      "category": "developer-tools"
+    }
+  ]
+}
