@@ -8,4 +8,4 @@ repos:
     rev: v1.5.6
     hooks:
       - id: skill-validator
-        args: ["check", "skills/"]
+        args: ["check", "--strict", "--emit-annotations", "skills/"]
