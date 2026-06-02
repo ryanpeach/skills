@@ -1,14 +1,14 @@
-repos:
-  - repo: https://github.com/agent-ecosystem/skill-validator
-    rev: v1.5.6
-    hooks:
-      # This repo keeps skills under plugins/<plugin>/skills/, not the
-      # platform default (.claude/skills/), and `check` takes a single
-      # directory that is the *parent* of the skill folders. So we run the
-      # generic `skill-validator` hook once per plugin's skills directory.
-      - id: skill-validator
-        name: skill-validator (skill-linting)
-        args: ["check", "plugins/skill-linting/skills/"]
-      - id: skill-validator
-        name: skill-validator (fork-maintenance)
-        args: ["check", "plugins/fork-maintenance/skills/"]
+# Workspace-root config for prek (https://prek.j178.dev).
+#
+# prek discovers nested .pre-commit-config.yaml files as separate "projects"
+# and runs each in its own directory. Skill validation lives in the per-plugin
+# configs:
+#   - plugins/skill-linting/.pre-commit-config.yaml
+#   - plugins/fork-maintenance/.pre-commit-config.yaml
+#
+# This root config only anchors the workspace; it intentionally runs no skill
+# checks so skills are not validated twice (nested projects + root).
+#
+# NOTE: requires prek. Plain `pre-commit` only ever loads a single config and
+# will NOT pick up the nested per-plugin configs.
+repos: []

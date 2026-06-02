@@ -1,0 +1,11 @@
+# prek nested project config (workspace mode).
+# Hooks run with cwd set to this directory, so "check skills/" validates every
+# skill under this plugin (MultiSkill mode). New skills are picked up
+# automatically. Requires prek (https://prek.j178.dev); plain pre-commit does
+# not discover nested configs.
+repos:
+  - repo: https://github.com/agent-ecosystem/skill-validator
+    rev: v1.5.6
+    hooks:
+      - id: skill-validator
+        args: ["check", "skills/"]
