@@ -9,10 +9,10 @@ Two skill docs that say similar-but-not-identical things are the most common sou
 
 ## Run the checker
 
-[`./bin/cross_file_checking.py`](./bin/cross_file_checking.py) uses hybrid search (BM25 + sentence-transformer embeddings) to surface paragraph pairs above a similarity threshold:
+[`./scripts/cross_file_checking.py`](./scripts/cross_file_checking.py) uses hybrid search (BM25 + sentence-transformer embeddings) to surface paragraph pairs above a similarity threshold:
 
 ```
-uv run skills/detect-skill-contradictions/bin/cross_file_checking.py
+uv run skills/detect-skill-contradictions/scripts/cross_file_checking.py
 ```
 
 Useful flags:

@@ -24,9 +24,9 @@ skills/scan/assets/search.yml  -> ../../../personal/search.yml
 
 Use symlinks from an external file to a file in the skill if a file is needed in more than one skill.
 
-## Skill bins
+## Skill scripts
 
-Executable scripts live in `skills/{skill}/bin/`. They must be self-contained, runnable directly, and accept all external paths as CLI options with sensible defaults.
+Executable scripts live in `skills/{skill}/scripts/`. They must be self-contained, runnable directly, and accept all external paths as CLI options with sensible defaults.
 
 ### Python UV scripts
 
