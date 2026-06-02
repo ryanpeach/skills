@@ -12,16 +12,7 @@
   "plugins": [
     {
       "name": "skill-linting",
-      "source": {
-        "source": "github",
-        "repo": "ryanpeach/skill-linting"
-      },
-      "description": "Audits skills repos: structural lint + Claude Code safety review.",
-      "homepage": "https://github.com/ryanpeach/skill-linting",
-      "repository": "https://github.com/ryanpeach/skill-linting",
-      "license": "MIT",
-      "keywords": ["skills", "lint", "audit", "safety"],
-      "category": "developer-tools"
+      "source": "./plugins/skill-linting"
     },
     {
       "name": "superpowers",
