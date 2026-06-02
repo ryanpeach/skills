@@ -38,9 +38,18 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           plugin_marketplaces: 'https://github.com/ryanpeach/skills-marketplace.git'
           plugins: 'skill-linting@ryanpeach'
+          track_progress: true
           prompt: |
-            Run all the `skill-linting` skills against the changes in PR #${{ github.event.pull_request.number }} of ${{ github.repository }}.
-            Focus on files changed in this PR. Report findings as a PR review comment.
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+
+            Run all the `skill-linting@ryanpeach` plugin skills against the changes in this PR.
+
+            Then simply review the PR as a whole.
+
+            Report findings in a PR review.
+          claude_args: |
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
 
