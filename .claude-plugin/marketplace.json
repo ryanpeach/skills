@@ -12,7 +12,13 @@
   "plugins": [
     {
       "name": "skill-linting",
-      "source": "./plugins/skill-linting"
+      "source": "./plugins/skill-linting",
+      "category": "code-review"
+    },
+    {
+      "name": "fork-maintenance",
+      "source": "./plugins/fork-maintenance",
+      "category": "development"
     },
     {
       "name": "superpowers",
@@ -20,12 +26,9 @@
         "source": "github",
         "repo": "ryanpeach/superpowers"
       },
-      "description": "Core skills library for Claude Code: TDD, debugging, collaboration patterns, and proven techniques.",
       "homepage": "https://github.com/ryanpeach/superpowers",
       "repository": "https://github.com/ryanpeach/superpowers",
-      "license": "MIT",
-      "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows"],
-      "category": "developer-tools"
+      "category": "development"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
-  "name": "skill-linting",
+  "name": "fork-maintenance",
   "version": "0.1.0",
-  "description": "Audits skills repos",
+  "description": "Teaches the LLM how best to maintain a fork.",
   "author": {
     "name": "Ryan Peach",
     "url": "https://github.com/ryanpeach"
