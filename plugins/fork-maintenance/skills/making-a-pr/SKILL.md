@@ -5,13 +5,13 @@ description: Whenever making a PR inside a forked repository (one with an upstre
 
 # Making a PR in a Fork Repository
 
-## Feature Branch PRs
+## Contrib Branch PRs
 
-When you make a PR from a `feature/*` branch in your forked repo, you want to make 2 PRs:
+When you make a PR from a `contrib/*` branch in your forked repo, you want to make 2 PRs:
 
-1. A PR from your `feature/*` branch to the `fork` branch in your forked repo. This is a PR updates your own use of the project whether or not the upstream accepts your contribution.
-2. A PR from your `feature/*` branch to the `main` (or default) branch in the `upstream` repo. This is the PR that may or may not get accepted by the upstream maintainers, but it's good for getting feedback and code review from the maintainers and the community, and is necessary for your contribution to be merged into the original repo.
+1. A PR from your `contrib/*` branch to the `fork` branch in your forked repo. This is a PR updates your own use of the project whether or not the upstream accepts your contribution.
+2. A PR from your `contrib/*` branch to the `main` (or default) branch in the `upstream` repo. This is the PR that may or may not get accepted by the upstream maintainers, but it's good for getting feedback and code review from the maintainers and the community, and is necessary for your contribution to be merged into the original repo.
 
-## Fork Branch PRs
+## Personal Branch PRs
 
-When you make a PR from a `fork/*` branch, you only need to make the PR to your own `fork` branch, since that work is not intended to be shared back to the original repo.
+When you make a PR from a `personal/*` branch, you only need to make the PR to your own `fork` branch, since that work is not intended to be shared back to the original repo.
