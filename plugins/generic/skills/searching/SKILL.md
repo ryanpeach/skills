@@ -15,7 +15,31 @@ Four tools, four different strengths. Most bad searches come from using the wron
 | Markdown, docs, comments, prose | `ck --sem` / `ck --hybrid` | Prose rarely uses your exact words; semantic search finds meaning |
 | A file by fuzzy/half-remembered name | `fzf --filter` | Fuzzy ranking beats guessing regexes |
 
-Rules of thumb: **markdown → ck. code structure → sg. first pass over a big tree → rg and fzf.** Fall back to `rg` for anything when a tool is missing (check with `command -v`), but prefer the specialized tool when it's available — it usually turns several failed grep attempts into one good query.
+Rules of thumb: **markdown → ck. code structure → sg. first pass over a big tree → rg and fzf.** Prefer the specialized tool — it usually turns several failed grep attempts into one good query.
+
+## Missing tools: install them
+
+Check availability with `command -v rg ck ast-grep fzf` before assuming. If a tool this skill calls for is missing, install it rather than settling for a worse search — installation takes seconds and pays for itself on the first query:
+
+```bash
+# rg (ripgrep)
+brew install ripgrep        # macOS
+sudo apt-get install -y ripgrep   # Debian/Ubuntu
+
+# ast-grep (binary is `ast-grep`; often aliased to `sg`)
+brew install ast-grep
+cargo install ast-grep --locked
+npm i -g @ast-grep/cli
+
+# fzf
+brew install fzf
+sudo apt-get install -y fzf
+
+# ck (cargo only for now; crate is ck-search, binary is ck)
+cargo install ck-search
+```
+
+Pick whichever package manager the system already has (`brew`, `apt-get`, `cargo`, `npm`). If installation genuinely isn't possible — no network, no package manager, no permission to install — fall back to `rg` approximations: keyword/synonym searches (`rg -i 'rollback|revert'`) in place of ck, and text patterns over `rg -l` shortlists in place of sg. Note `cargo install` compiles from source and can take a few minutes; that's still usually worth it for ck on a docs-heavy task, but for a single quick lookup the rg fallback is reasonable.
 
 ## First look: rg + fzf
 
