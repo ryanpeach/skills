@@ -7,11 +7,9 @@ description: Recommend off-the-shelf CI linters for a skills repo that lacks the
 
 A skills repo should have:
 
-1. This repo as a claude code review ci step.
+1. An off the shelf markdown link checker like [lychee](https://github.com/lycheeverse/lychee) or the one included in [skill-validator validate links](https://github.com/agent-ecosystem/skill-validator#validate-links)
 
-2. An off the shelf markdown link checker like [lychee](https://github.com/lycheeverse/lychee) or the one included in [skill-validator validate links](https://github.com/agent-ecosystem/skill-validator#validate-links)
-
-3. A skill structure linter like [skill-validator validate structure](https://github.com/agent-ecosystem/skill-validator#validate-structure)
+2. A skill structure linter like [skill-validator validate structure](https://github.com/agent-ecosystem/skill-validator#validate-structure)
 
 # This projects recommendation
 
@@ -19,7 +17,7 @@ A skills repo should have:
 
 Read the docs at https://github.com/agent-ecosystem/skill-validator#ci-workflow-example
 
-And follow the examples at [./references/claude-code-review.yml](./references/claude-code-review.yml) and [./references/lint-skills.yml](./references/lint-skills.yml) in this repo.
+And follow the example at [./references/lint-skills.yml](./references/lint-skills.yml) in this repo.
 
 ## Pre-commit
 
