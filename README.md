@@ -8,6 +8,7 @@ Claude Code plugin marketplace aggregating Ryan Peach's plugins.
 /plugin marketplace add ryanpeach/skills
 /plugin install skill-linting@ryanpeach
 /plugin install fork-maintenance@ryanpeach
+/plugin install generic@ryanpeach
 /plugin install superpowers@ryanpeach
 ```
 

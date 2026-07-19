@@ -21,6 +21,11 @@
       "category": "development"
     },
     {
+      "name": "generic",
+      "source": "./plugins/generic",
+      "category": "development"
+    },
+    {
       "name": "superpowers",
       "source": {
         "source": "github",
