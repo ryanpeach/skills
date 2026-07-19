@@ -21,6 +21,11 @@
       "category": "development"
     },
     {
+      "name": "search",
+      "source": "./plugins/search",
+      "category": "development"
+    },
+    {
       "name": "superpowers",
       "source": {
         "source": "github",
