@@ -1,5 +1,5 @@
 {
-  "name": "search",
+  "name": "generic",
   "version": "0.1.0",
   "description": "Teaches effective codebase and document search using rg, ck, ast-grep (sg), and fzf",
   "author": {
