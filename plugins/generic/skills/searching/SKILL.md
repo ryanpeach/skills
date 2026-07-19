@@ -1,6 +1,6 @@
 ---
 name: searching
-description: How to search codebases and documentation effectively by picking the right tool for the job - rg and fzf for a fast first pass over big sets of files, ast-grep (sg) for structure-aware code search, and ck for semantic search over markdown and prose. Use this skill whenever you are about to search a repository for anything - finding where something is defined or used, locating a file by half-remembered name, hunting through docs or markdown notes, planning a refactor across many call sites, or exploring an unfamiliar codebase. Even a simple "grep for X" request benefits from this skill's tool selection.
+description: Always use before searching a codebase or docs. Picks the right tool - rg, fzf, ast-grep, or ck.
 ---
 
 # Searching Codebases and Docs
