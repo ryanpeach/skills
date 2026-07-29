@@ -60,3 +60,8 @@ For JS bins we recommend either:
 # Finally
 
 Run all the skills in [references](./references/)
+
+* [Check Skill Nonlinks](./references/check-skill-nonlinks.md)
+* [Detect Skill Contradictions/Duplications](./references/detect-skill-contradictions-duplications.md)
+* [Permissions Safety](./references/permissions-safety.md)
+* [Recommended CI Linters](./references/recommend-ci-linters.md)
