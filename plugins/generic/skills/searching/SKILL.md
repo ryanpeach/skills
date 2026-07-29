@@ -1,6 +1,6 @@
 ---
 name: searching
-description: Always use before searching a codebase or docs. Picks the right tool - rg, fzf, ast-grep, or ck.
+description: Always use before searching a codebase or docs. Picks the right tool.
 ---
 
 # Searching Codebases and Docs
@@ -9,22 +9,15 @@ Most bad searches come from using the wrong tool: regex-grepping prose that does
 
 | Searching for... | Use |
 |---|---|
-| First look over many/unknown files; exact strings and identifiers | `rg` |
-| A file by fuzzy/half-remembered name | `fzf --filter` |
-| Code *structure* (call sites, patterns, refactors) | `sg` (ast-grep) |
-| Markdown, docs, comments, prose | `ck --sem` |
+| First look over many/unknown files; exact strings and identifiers | [rg](https://github.com/burntsushi/ripgrep) |
+| A file or variable name by fuzzy/half-remembered name | [fzf](https://github.com/junegunn/fzf) |
+| Code *structure* (call sites, patterns, refactors) | [ast-grep](https://github.com/ast-grep/ast-grep) |
+| Natural language text, docs, comments, prose | [ck](https://github.com/BeaconBay/ck) |
 
-Before using a tool for the first time this session, read its reference:
-
-- `references/rg-fzf.md` — first-pass mapping, narrowing flags, fuzzy filename matching
-- `references/ast-grep.md` — pattern syntax, metavariables, structural rewrites
-- `references/ck.md` — indexing, semantic vs. hybrid mode, query phrasing
+You can also combine these tools via piping.
 
 Ground rules:
 
-- If a tool is missing (`command -v`), install it — each reference has install commands. Fall back to rg approximations only when installing is impossible.
-- Never launch interactive TUIs (bare `fzf`, `ck --tui`); there's no terminal for them.
-- Start cheap: `rg -l` to gauge blast radius, then narrow, then read. Search narrows; reading confirms.
+- If a tool is missing (`command -v`), install it.
+- Never launch interactive TUIs. There's no terminal for them.
 - Report findings as `file:line` so they're actionable.
-
-Typical flow for "find where X happens": map candidates with rg/fzf → pinpoint with sg (code pattern) or ck (described in prose) → read the few files that survive.
