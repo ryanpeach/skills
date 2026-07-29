@@ -22,3 +22,13 @@ See [STYLEGUIDE.md](STYLEGUIDE.md) for conventions.
 ```
 
 The exception is filenames that are referencing a *type* of file, not a specific file. For example, `SKILL.md` might refer to a specific file OR to the general type of file that all skills have. In the first case, it should be a link. In the second, it should not. If it should be a link, prefer [`./SKILL.md`](./SKILL.md) to be explicit that it's referring to the file in the current directory.
+
+## How to check
+
+Scan the skill using `grep` for
+
+```re
+`[^`]*\.[^`]*`
+```
+
+to find things inside a `` block that look like a file.
