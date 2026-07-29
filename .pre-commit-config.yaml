@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/agent-ecosystem/skill-validator
-    rev: v0.5.0
+    rev: v1.5.6
     hooks:
       - id: skill-validator-claude
         args: ["check", "plugins/**/skills/"]
