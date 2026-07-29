@@ -21,18 +21,8 @@
       "category": "development"
     },
     {
-      "name": "generic",
+      "name": "brainrot",
       "source": "./plugins/generic",
-      "category": "development"
-    },
-    {
-      "name": "superpowers",
-      "source": {
-        "source": "github",
-        "repo": "ryanpeach/superpowers"
-      },
-      "homepage": "https://github.com/ryanpeach/superpowers",
-      "repository": "https://github.com/ryanpeach/superpowers",
       "category": "development"
     }
   ]

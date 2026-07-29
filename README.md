@@ -6,14 +6,16 @@ Claude Code plugin marketplace aggregating Ryan Peach's plugins.
 
 ```
 /plugin marketplace add ryanpeach/skills
+/plugin install brainrot@ryanpeach
 /plugin install skill-linting@ryanpeach
 /plugin install fork-maintenance@ryanpeach
-/plugin install generic@ryanpeach
-/plugin install superpowers@ryanpeach
 ```
 
 ## Plugins
 
-- **superpowers** — Core skills library for Claude Code: TDD, debugging, collaboration patterns. ([repo](https://github.com/ryanpeach/superpowers))
-
-Plugin source lives in each plugin's own repo; this repo only contains the marketplace manifest.
+* **brainrot** - My default coding skill. Prevents me from losing my skills when using AI while coding. Prioritizes:
+  * Allows the user to use cheaper models.
+  * No major additional code review burden.
+  * Edits are done by the user.
+* **skill-linting** - Lints claude skills for styleguide stuff.
+* **fork-maintenance** - My standards for working on a fork.

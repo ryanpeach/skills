@@ -1,0 +1,9 @@
+{
+  "name": "brainrot",
+  "version": "0.1.0",
+  "description": "Helpful without hurting the users coding skills or requiring serious code review.",
+  "author": {
+    "name": "Ryan Peach",
+    "url": "https://github.com/ryanpeach"
+  }
+}
