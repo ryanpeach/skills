@@ -1,9 +1,11 @@
 ---
-name: skill-linting-misc
+name: skill-linting
 description: Miscellaneous guidelines for skill linting that don't fit into other categories.
 ---
 
-# Skill Linting Misc
+# Skill Linting
+
+If provided a github PR as an argument. Pull that PR's diff. Only dynamically review skills changed in the diff. Modify the following instructions as needed.
 
 ## Length
 
@@ -54,3 +56,7 @@ For JS bins we recommend either:
 
 1. using `.cjs` extension without any libraries.
 2. Using [deno](https://docs.deno.com/runtime/fundamentals/node/) so that dependencies can be imported directly in the script and run with `deno run` with no manual setup.
+
+# Finally
+
+Run all the skills in [references](./references/)

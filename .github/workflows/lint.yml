@@ -1,0 +1,63 @@
+name: Validate Skills
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+
+jobs:
+  claude-review:
+    # Optional: Filter by PR author
+    # if: |
+    #   github.event.pull_request.user.login == 'external-contributor' ||
+    #   github.event.pull_request.user.login == 'new-developer' ||
+    #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Code Review
+        id: claude-review
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          plugin_marketplaces: 'https://github.com/ryanpeach/skills.git'
+          plugins: 'skill-linting@ryanpeach'
+          prompt: '/skill-linting:skill-linting ${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
+          # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
+          # or https://code.claude.com/docs/en/cli-reference for available options
+
+
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Install skill-validator
+        run: |
+          brew install agent-ecosystem/tap/skill-validator
+
+      - name: Validate skills
+        run: |
+          exit_code=0
+          for skill_dir in plugins/*/skills/; do
+            if [ -d "$skill_dir" ]; then
+              echo "Validating skills in $skill_dir"
+              skill-validator check --strict --emit-annotations "$skill_dir" || exit_code=$?
+              skill-validator check --strict -o markdown "$skill_dir" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "No skills directory found in $skill_dir, skipping."
+            fi
+          done
+          exit $exit_code
