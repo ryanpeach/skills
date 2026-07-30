@@ -22,7 +22,7 @@
     },
     {
       "name": "brainrot",
-      "source": "./plugins/generic",
+      "source": "./plugins/brainrot",
       "category": "development"
     }
   ]
