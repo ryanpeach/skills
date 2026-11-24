@@ -1,0 +1,208 @@
+---
+name: Release
+
+# Cut a release whenever a pull request is merged into the default branch.
+# The bump is chosen from the PR's labels:
+#
+#   major  -> MAJOR.0.0
+#   minor  -> X.MINOR.0
+#   patch  -> X.Y.PATCH   (also the default when no bump label is present)
+#
+# `main` is protected by a ruleset that requires every change to go through a
+# pull request, so this workflow cannot push the bump directly. Instead it:
+#
+#   1. creates release/vX.Y.Z from the default branch,
+#   2. bumps `.claude-plugin/marketplace.json` and every plugin manifest,
+#   3. opens a PR for the bump and merges it (zero approvals are required),
+#   4. tags the merge commit, and
+#   5. publishes a GitHub Release with generated notes.
+#
+# The next version is derived from the newest `v*` tag (falling back to the
+# marketplace version when there are no tags), so releases stay monotonic even
+# if a previous release PR was not merged.
+#
+# Merges from forks need a RELEASE_TOKEN secret (a fine-grained PAT with
+# `contents: write` and `pull-requests: write`); the default GITHUB_TOKEN is
+# read-only for fork pull requests.
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+# Never run two releases at once, and let a queued release finish instead of
+# being cancelled mid-push.
+concurrency:
+  group: release-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: >-
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.base.ref ==
+      github.event.repository.default_branch &&
+      !startsWith(github.event.pull_request.title,
+      'chore(release):') &&
+      !contains(github.event.pull_request.labels.*.name, 'release')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reject fork merges without a push token
+        if: >-
+          github.event.pull_request.head.repo.full_name !=
+          github.repository
+        env:
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          if [ -z "$RELEASE_TOKEN" ]; then
+            echo "::error::Fork PR needs a RELEASE_TOKEN secret."
+            echo "::error::Add a PAT with contents: write and"
+            echo "::error::pull-requests: write."
+            exit 1
+          fi
+
+      - name: Checkout default branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN || github.token }}
+
+      - name: Determine bump from labels
+        id: bump
+        env:
+          LABELS: ${{ toJson(github.event.pull_request.labels.*.name) }}
+        run: |
+          bump=patch
+          if jq -e 'map(ascii_downcase) | index("major")' \
+              >/dev/null <<<"$LABELS"; then
+            bump=major
+          elif jq -e 'map(ascii_downcase) | index("minor")' \
+              >/dev/null <<<"$LABELS"; then
+            bump=minor
+          fi
+          echo "Selected bump: $bump (labels: $LABELS)"
+          echo "bump=$bump" >> "$GITHUB_OUTPUT"
+
+      - name: Compute next version
+        id: version
+        env:
+          BUMP: ${{ steps.bump.outputs.bump }}
+        run: |
+          last=$(git describe --tags --abbrev=0 2>/dev/null || true)
+          if [ -n "$last" ]; then
+            base=${last#v}
+          else
+            base=$(jq -r '.metadata.version' \
+              .claude-plugin/marketplace.json)
+          fi
+          next=$(python3 scripts/bump_version.py \
+            --current "$base" --bump "$BUMP" --dry-run)
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+          echo "next=$next" >> "$GITHUB_OUTPUT"
+          echo "Releasing v$base -> v$next"
+
+      - name: Skip already-released version
+        id: existing
+        env:
+          NEXT: ${{ steps.version.outputs.next }}
+        run: |
+          if git rev-parse -q --verify "refs/tags/v$NEXT" >/dev/null
+          then
+            echo "::notice::Tag v$NEXT exists; nothing to release."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit bump on release branch
+        if: steps.existing.outputs.skip != 'true'
+        env:
+          NEXT: ${{ steps.version.outputs.next }}
+        run: |
+          git switch -c "release/v$NEXT"
+          python3 scripts/bump_version.py --set "$NEXT"
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .claude-plugin/marketplace.json plugins
+          git commit -m "chore(release): v$NEXT"
+          git push --force origin \
+            "HEAD:refs/heads/release/v$NEXT"
+
+      - name: Open and merge release PR
+        if: steps.existing.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN || github.token }}
+          NEXT: ${{ steps.version.outputs.next }}
+          BASE: ${{ github.event.repository.default_branch }}
+        run: |
+          branch="release/v$NEXT"
+          pr=$(gh pr list --head "$branch" --state open \
+            --json number --jq '.[0].number // empty')
+          if [ -z "$pr" ]; then
+            gh pr create --base "$BASE" --head "$branch" \
+              --title "chore(release): v$NEXT" \
+              --body "Automated version bump for v$NEXT." \
+              --label release
+            pr=$(gh pr view "$branch" --json number --jq .number)
+          fi
+
+          merged=false
+          for attempt in 1 2 3 4 5 6; do
+            gh pr merge "$pr" --merge --delete-branch || true
+            state=$(gh pr view "$pr" --json state --jq .state)
+            if [ "$state" = "MERGED" ]; then
+              merged=true
+              break
+            fi
+            if [ "$state" = "CLOSED" ]; then
+              echo "::error::Release PR #$pr closed without merging."
+              exit 1
+            fi
+            echo "Merge not ready (attempt $attempt); retrying."
+            sleep 10
+          done
+          if [ "$merged" != true ]; then
+            echo "::error::Could not merge release PR #$pr"
+            exit 1
+          fi
+
+      - name: Tag and publish release
+        if: steps.existing.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN || github.token }}
+          NEXT: ${{ steps.version.outputs.next }}
+          BASE: ${{ github.event.repository.default_branch }}
+        run: |
+          git fetch origin "$BASE"
+          git switch -C "$BASE" "origin/$BASE"
+          git tag -a "v$NEXT" -m "v$NEXT"
+          git push origin "v$NEXT"
+
+          prev=$(git describe --tags --abbrev=0 "v$NEXT^" \
+            2>/dev/null || true)
+          args="--title v$NEXT --generate-notes"
+          if [ -n "$prev" ]; then
+            args="$args --notes-start-tag $prev"
+          fi
+          gh release create "v$NEXT" $args
+
+      - name: Summarize
+        if: steps.existing.outputs.skip != 'true'
+        env:
+          NEXT: ${{ steps.version.outputs.next }}
+          BUMP: ${{ steps.bump.outputs.bump }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/v$NEXT"
+          {
+            echo "## Released v$NEXT"
+            echo ""
+            echo "- Bump: \`$BUMP\` (PR #$PR_NUMBER)"
+            echo "- Tag: \`v$NEXT\`"
+            echo "- Release: $url"
+          } >> "$GITHUB_STEP_SUMMARY"
