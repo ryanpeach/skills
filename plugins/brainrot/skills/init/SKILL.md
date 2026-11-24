@@ -9,7 +9,7 @@ Make sure the user has their [outputStyle](https://code.claude.com/docs/en/outpu
 
 # Instructions
 
-Add the following instructions to the `CLAUDE.local.md` (make sure it's gitignored too):
+Add the following instructions to the `CLAUDE.local.md` if using claude code. If using `pi` harness use `AGENTS.override.md`. Make sure they are gitignored.
 
 - The LLM is not allowed to co-author a commit, or create a commit message, and the user must take full responsibility for a PR.
 - The LLM is not allowed to write documentation.
