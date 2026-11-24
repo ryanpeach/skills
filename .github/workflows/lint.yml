@@ -31,9 +31,10 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           plugin_marketplaces: 'https://github.com/ryanpeach/skills.git'
           plugins: 'skill-linting@ryanpeach'
-          prompt: '/skill-linting:skill-linting ${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
-          # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
-          # or https://code.claude.com/docs/en/cli-reference for available options
+          prompt: >-
+            /skill-linting:skill-linting
+            ${{ github.event.pull_request.html_url }}
+          # See the claude-code-action docs for available options.
 
   skill-validator:
     runs-on: ubuntu-latest
@@ -58,4 +59,5 @@ jobs:
         working-directory: ${{ matrix.path }}
         run: |
           skill-validator check --strict --emit-annotations skills/
-          skill-validator check --strict -o markdown skills/ >> "$GITHUB_STEP_SUMMARY"
+          skill-validator check --strict -o markdown skills/ \
+            >> "$GITHUB_STEP_SUMMARY"
